@@ -1,0 +1,12 @@
+{
+  "name": "vitesse-lite-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter front dev\" \"pnpm --filter backend start:dev\"",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
