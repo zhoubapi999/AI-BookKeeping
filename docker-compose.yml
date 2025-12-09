@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/backend.dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    restart: always
+    container_name: vitesse-backend
+
+  frontend:
+    build:
+      context: .
+      dockerfile: deploy/frontend.dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+    container_name: vitesse-frontend

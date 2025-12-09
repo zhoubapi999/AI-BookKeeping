@@ -7,7 +7,7 @@
     "test": "pnpm -r test"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "catalog:"
   },
   "resolutions": {
     "unplugin": "catalog:build",
