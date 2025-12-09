@@ -52,10 +52,6 @@
     "vitest": "catalog:dev",
     "vue-tsc": "catalog:dev"
   },
-  "resolutions": {
-    "unplugin": "catalog:build",
-    "vite": "catalog:build"
-  },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
   },

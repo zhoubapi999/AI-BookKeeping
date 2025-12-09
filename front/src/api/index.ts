@@ -1,8 +1,8 @@
-import axios from 'axios'
 import type { Category, Settings, Transaction as SharedTransaction } from '@app/types'
+import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 })
 
 export type { Category, Settings }
@@ -11,52 +11,52 @@ export interface Transaction extends SharedTransaction {
   category?: Category
 }
 
-export const getSettings = async () => {
+export async function getSettings() {
   const { data } = await api.get<Settings>('/settings')
   return data
 }
 
-export const updateSettings = async (settings: Partial<Settings>) => {
+export async function updateSettings(settings: Partial<Settings>) {
   const { data } = await api.patch<Settings>('/settings', settings)
   return data
 }
 
-export const getCategories = async () => {
+export async function getCategories() {
   const { data } = await api.get<Category[]>('/categories')
   return data
 }
 
-export const createCategory = async (category: Omit<Category, 'id'>) => {
+export async function createCategory(category: Omit<Category, 'id'>) {
   const { data } = await api.post<Category>('/categories', category)
   return data
 }
 
-export const updateCategory = async (id: number, category: Partial<Category>) => {
+export async function updateCategory(id: number, category: Partial<Category>) {
   const { data } = await api.patch<Category>(`/categories/${id}`, category)
   return data
 }
 
-export const deleteCategory = async (id: number) => {
+export async function deleteCategory(id: number) {
   const { data } = await api.delete(`/categories/${id}`)
   return data
 }
 
-export const getTransactions = async () => {
+export async function getTransactions() {
   const { data } = await api.get<Transaction[]>('/transactions')
   return data
 }
 
-export const createTransaction = async (transaction: Omit<Transaction, 'id'>) => {
+export async function createTransaction(transaction: Omit<Transaction, 'id'>) {
   const { data } = await api.post<Transaction>('/transactions', transaction)
   return data
 }
 
-export const updateTransaction = async (id: number, transaction: Partial<Transaction>) => {
+export async function updateTransaction(id: number, transaction: Partial<Transaction>) {
   const { data } = await api.patch<Transaction>(`/transactions/${id}`, transaction)
   return data
 }
 
-export const deleteTransaction = async (id: number) => {
+export async function deleteTransaction(id: number) {
   const { data } = await api.delete(`/transactions/${id}`)
   return data
 }

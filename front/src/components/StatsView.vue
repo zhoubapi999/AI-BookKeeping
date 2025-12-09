@@ -10,6 +10,7 @@ import {
 } from 'echarts/components'
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
+import { ArrowRight } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import VChart from 'vue-echarts'
 import Card from '~/components/ui/card/Card.vue'
@@ -375,13 +376,15 @@ function getCategoryName(id: number) {
             <div class="i-carbon-chart-bar text-primary h-4 w-4" />
             支出/收入趋势
           </CardTitle>
-          <div
-            v-if="hoveredData"
-            class="text-xs text-primary font-bold cursor-pointer animate-fade-in hover:underline"
-            @click="handleHeaderClick"
-          >
-            {{ hoveredData.label }}: ¥{{ hoveredData.value }}
-            <span v-if="hoveredData.date" class="text-[10px] text-gray-400 font-normal ml-1">点击查看</span>
+        </div>
+        <div
+          v-if="hoveredData"
+          class="text-xs text-primary font-bold mt-2 flex gap-1 cursor-pointer items-center justify-center animate-fade-in hover:underline"
+          @click="handleHeaderClick"
+        >
+          {{ hoveredData.label }}: ¥{{ hoveredData.value }}
+          <div v-if="hoveredData.date" class="text-[10px] text-gray-400 font-normal ml-1 flex items-center">
+            点击查看 <ArrowRight class="ml-0.5 h-3 w-3" />
           </div>
         </div>
       </CardHeader>
