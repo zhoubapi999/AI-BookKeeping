@@ -37,15 +37,15 @@ const groupedTransactions = computed(() => {
   })
 })
 
-function getCategoryName(id: number) {
+function getCategoryName(id: string) {
   return props.categories.find(c => c.id === id)?.name || '未知'
 }
 
-function getCategoryColor(id: number) {
+function getCategoryColor(id: string) {
   return props.categories.find(c => c.id === id)?.color || '#ccc'
 }
 
-function getCategoryIconName(id: number) {
+function getCategoryIconName(id: string) {
   return props.categories.find(c => c.id === id)?.icon
 }
 </script>

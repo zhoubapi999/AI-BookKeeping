@@ -89,10 +89,12 @@ async function handleSaveTransaction(data: Partial<Transaction>) {
   }
   catch (error) {
     console.error('Failed to save transaction', error)
+    // eslint-disable-next-line no-alert
+    alert('保存失败，请重试')
   }
 }
 
-async function handleDeleteTransaction(id: number) {
+async function handleDeleteTransaction(id: string) {
   if (!confirm('确定要删除吗？'))
     return
   try {
@@ -105,7 +107,7 @@ async function handleDeleteTransaction(id: number) {
   }
 }
 
-async function handleSaveCategory(data: Partial<Category>, id?: number) {
+async function handleSaveCategory(data: Partial<Category>, id?: string) {
   try {
     if (id) {
       await updateCategory(id, data)
@@ -120,7 +122,7 @@ async function handleSaveCategory(data: Partial<Category>, id?: number) {
   }
 }
 
-async function handleDeleteCategory(id: number) {
+async function handleDeleteCategory(id: string) {
   if (!confirm('确定要删除吗？'))
     return
   try {

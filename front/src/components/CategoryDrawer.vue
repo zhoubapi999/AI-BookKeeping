@@ -19,8 +19,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
-  (e: 'save', category: Partial<Category>, id?: number): void
-  (e: 'delete', id: number): void
+  (e: 'save', category: Partial<Category>, id?: string): void
+  (e: 'delete', id: string): void
 }>()
 
 const isOpen = computed({
@@ -35,7 +35,7 @@ const formData = ref<Partial<Category>>({
   name: '',
 })
 
-const editingId = ref<number | null>(null)
+const editingId = ref<string | null>(null)
 
 watch(() => props.open, (val) => {
   if (val) {
@@ -53,19 +53,26 @@ function resetForm() {
   editingId.value = null
 }
 
+const filteredCategories = computed(() => {
+  return props.categories.filter(c => c.type === formData.value.type)
+})
+
 function handleEdit(category: Category) {
   formData.value = { ...category }
   editingId.value = category.id
 }
 
 function handleSave() {
-  if (!formData.value.name)
+  if (!formData.value.name) {
+    // eslint-disable-next-line no-alert
+    alert('请输入分类名称')
     return
+  }
   emit('save', formData.value, editingId.value || undefined)
   resetForm()
 }
 
-function handleDelete(id: number) {
+function handleDelete(id: string) {
   emit('delete', id)
 }
 </script>
@@ -128,7 +135,7 @@ function handleDelete(id: number) {
           </h3>
           <div class="gap-2 grid grid-cols-1">
             <div
-              v-for="c in categories"
+              v-for="c in filteredCategories"
               :key="c.id"
               class="p-3 border rounded bg-card flex items-center justify-between"
             >

@@ -1,44 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { JsonDbService } from '../db/json-db.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { Transaction } from '@app/types';
+import { TransactionEntity, TransactionDocument } from '../schemas/transaction.schema';
 
 @Injectable()
 export class TransactionsService {
-  constructor(private db: JsonDbService) {}
+  constructor(
+    @InjectModel(TransactionEntity.name) private transactionModel: Model<TransactionDocument>,
+  ) {}
 
   async create(createTransactionDto: Omit<Transaction, 'id'>) {
-    const transactions = await this.db.read<Transaction[]>('transactions');
-    const newTransaction = { ...createTransactionDto, id: Date.now() };
-    transactions.push(newTransaction);
-    await this.db.write('transactions', transactions);
-    return newTransaction;
+    const createdTransaction = new this.transactionModel(createTransactionDto);
+    return createdTransaction.save();
   }
 
   async findAll() {
-    const transactions = await this.db.read<Transaction[]>('transactions');
-    return transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return this.transactionModel.find().sort({ date: -1 }).exec();
   }
 
-  async findOne(id: number) {
-    const transactions = await this.db.read<Transaction[]>('transactions');
-    return transactions.find((t) => t.id === id);
+  async findOne(id: string) {
+    return this.transactionModel.findById(id).exec();
   }
 
-  async update(id: number, updateTransactionDto: Partial<Transaction>) {
-    const transactions = await this.db.read<Transaction[]>('transactions');
-    const index = transactions.findIndex((t) => t.id === id);
-    if (index > -1) {
-      transactions[index] = { ...transactions[index], ...updateTransactionDto };
-      await this.db.write('transactions', transactions);
-      return transactions[index];
-    }
-    return null;
+  async update(id: string, updateTransactionDto: Partial<Transaction>) {
+    return this.transactionModel
+      .findByIdAndUpdate(id, updateTransactionDto, { new: true })
+      .exec();
   }
 
-  async remove(id: number) {
-    const transactions = await this.db.read<Transaction[]>('transactions');
-    const newTransactions = transactions.filter((t) => t.id !== id);
-    await this.db.write('transactions', newTransactions);
+  async remove(id: string) {
+    await this.transactionModel.findByIdAndDelete(id).exec();
     return { success: true };
   }
 }

@@ -328,7 +328,7 @@ const pieChartOption = computed(() => {
   }
 })
 
-function getCategoryName(id: number) {
+function getCategoryName(id: string) {
   return props.categories.find(c => c.id === id)?.name || '未知'
 }
 </script>

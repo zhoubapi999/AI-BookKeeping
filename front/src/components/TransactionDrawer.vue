@@ -22,7 +22,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
   (e: 'save', transaction: Partial<Transaction>): void
-  (e: 'delete', id: number): void
+  (e: 'delete', id: string): void
   (e: 'add-category'): void
 }>()
 
@@ -57,7 +57,20 @@ watch(() => props.open, (val) => {
 })
 
 function handleSave() {
-  emit('save', formData.value)
+  if (!formData.value.amount) {
+    // eslint-disable-next-line no-alert
+    alert('请输入金额')
+    return
+  }
+  if (!formData.value.categoryId) {
+    // eslint-disable-next-line no-alert
+    alert('请选择分类')
+    return
+  }
+  emit('save', {
+    ...formData.value,
+    amount: Number(formData.value.amount),
+  })
 }
 
 function handleDelete() {

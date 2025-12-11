@@ -31,12 +31,12 @@ export async function createCategory(category: Omit<Category, 'id'>) {
   return data
 }
 
-export async function updateCategory(id: number, category: Partial<Category>) {
+export async function updateCategory(id: string, category: Partial<Category>) {
   const { data } = await api.patch<Category>(`/categories/${id}`, category)
   return data
 }
 
-export async function deleteCategory(id: number) {
+export async function deleteCategory(id: string) {
   const { data } = await api.delete(`/categories/${id}`)
   return data
 }
@@ -51,12 +51,12 @@ export async function createTransaction(transaction: Omit<Transaction, 'id'>) {
   return data
 }
 
-export async function updateTransaction(id: number, transaction: Partial<Transaction>) {
+export async function updateTransaction(id: string, transaction: Partial<Transaction>) {
   const { data } = await api.patch<Transaction>(`/transactions/${id}`, transaction)
   return data
 }
 
-export async function deleteTransaction(id: number) {
+export async function deleteTransaction(id: string) {
   const { data } = await api.delete(`/transactions/${id}`)
   return data
 }

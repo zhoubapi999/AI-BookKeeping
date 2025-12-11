@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
-import { DbModule } from '../db/db.module';
+import { MongooseModule } from '@nestjs/mongoose';
 import { SettingsController } from './settings.controller';
 import { SettingsService } from './settings.service';
+import { SettingsEntity, SettingsSchema } from '../schemas/settings.schema';
 
 @Module({
-  imports: [DbModule],
+  imports: [
+    MongooseModule.forFeature([{ name: SettingsEntity.name, schema: SettingsSchema }]),
+  ],
   controllers: [SettingsController],
   providers: [SettingsService],
 })

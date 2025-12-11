@@ -17,7 +17,7 @@ COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/backend/package.json ./backend/package.json
 
-EXPOSE 3000
+EXPOSE 34863
 
 # Ensure data directory exists
 RUN mkdir -p /app/data

@@ -1,43 +1,37 @@
-import { Injectable } from '@nestjs/common';
-import { JsonDbService } from '../db/json-db.service';
-import { Category } from '@app/types';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { Category } from "@app/types";
+import { CategoryEntity, CategoryDocument } from "../schemas/category.schema";
 
 @Injectable()
 export class CategoriesService {
-  constructor(private db: JsonDbService) {}
+  constructor(
+    @InjectModel(CategoryEntity.name)
+    private categoryModel: Model<CategoryDocument>,
+  ) {}
 
-  async create(createCategoryDto: Omit<Category, 'id'>) {
-    const categories = await this.db.read<Category[]>('categories');
-    const newCategory = { ...createCategoryDto, id: Date.now() };
-    categories.push(newCategory);
-    await this.db.write('categories', categories);
-    return newCategory;
+  async create(createCategoryDto: Omit<Category, "id">) {
+    const createdCategory = new this.categoryModel(createCategoryDto);
+    return createdCategory.save();
   }
 
   async findAll() {
-    return this.db.read<Category[]>('categories');
+    return this.categoryModel.find().exec();
   }
 
-  async findOne(id: number) {
-    const categories = await this.db.read<Category[]>('categories');
-    return categories.find((c) => c.id === id);
+  async findOne(id: string) {
+    return this.categoryModel.findById(id).exec();
   }
 
-  async update(id: number, updateCategoryDto: Partial<Category>) {
-    const categories = await this.db.read<Category[]>('categories');
-    const index = categories.findIndex((c) => c.id === id);
-    if (index > -1) {
-      categories[index] = { ...categories[index], ...updateCategoryDto };
-      await this.db.write('categories', categories);
-      return categories[index];
-    }
-    return null;
+  async update(id: string, updateCategoryDto: Partial<Category>) {
+    return this.categoryModel
+      .findByIdAndUpdate(id, updateCategoryDto, { new: true })
+      .exec();
   }
 
-  async remove(id: number) {
-    const categories = await this.db.read<Category[]>('categories');
-    const newCategories = categories.filter((c) => c.id !== id);
-    await this.db.write('categories', newCategories);
+  async remove(id: string) {
+    await this.categoryModel.findByIdAndDelete(id).exec();
     return { success: true };
   }
 }
