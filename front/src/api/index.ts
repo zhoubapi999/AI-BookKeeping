@@ -1,9 +1,40 @@
 import type { Category, Settings, Transaction as SharedTransaction } from '@app/types'
 import axios from 'axios'
+import { toast } from 'vue-sonner'
+import { router } from '~/main'
+import { useUserStore } from '~/stores/user'
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 })
+
+api.interceptors.request.use((config) => {
+  const userStore = useUserStore()
+  const token = userStore.token
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
+api.interceptors.response.use(
+  (response) => {
+    return response.data.data
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      const userStore = useUserStore()
+      userStore.logout()
+      router.push('/login')
+      toast.error('登录已过期，请重新登录')
+    }
+    else {
+      const errorMessage = error.response?.data?.message || '请求失败，请重试'
+      toast.error(errorMessage)
+    }
+    return Promise.reject(error)
+  },
+)
 
 export type { Category, Settings }
 
@@ -11,52 +42,54 @@ export interface Transaction extends SharedTransaction {
   category?: Category
 }
 
+export * from './auth'
+
 export async function getSettings() {
-  const { data } = await api.get<Settings>('/settings')
-  return data
+  const data = await api.get<Settings>('/settings')
+  return data as unknown as Settings
 }
 
 export async function updateSettings(settings: Partial<Settings>) {
-  const { data } = await api.patch<Settings>('/settings', settings)
-  return data
+  const data = await api.patch<Settings>('/settings', settings)
+  return data as unknown as Settings
 }
 
 export async function getCategories() {
-  const { data } = await api.get<Category[]>('/categories')
-  return data
+  const data = await api.get<Category[]>('/categories')
+  return data as unknown as Category[]
 }
 
 export async function createCategory(category: Omit<Category, 'id'>) {
-  const { data } = await api.post<Category>('/categories', category)
-  return data
+  const data = await api.post<Category>('/categories', category)
+  return data as unknown as Category
 }
 
 export async function updateCategory(id: string, category: Partial<Category>) {
-  const { data } = await api.patch<Category>(`/categories/${id}`, category)
-  return data
+  const data = await api.patch<Category>(`/categories/${id}`, category)
+  return data as unknown as Category
 }
 
 export async function deleteCategory(id: string) {
-  const { data } = await api.delete(`/categories/${id}`)
+  const data = await api.delete(`/categories/${id}`)
   return data
 }
 
 export async function getTransactions() {
-  const { data } = await api.get<Transaction[]>('/transactions')
-  return data
+  const data = await api.get<Transaction[]>('/transactions')
+  return data as unknown as Transaction[]
 }
 
 export async function createTransaction(transaction: Omit<Transaction, 'id'>) {
-  const { data } = await api.post<Transaction>('/transactions', transaction)
-  return data
+  const data = await api.post<Transaction>('/transactions', transaction)
+  return data as unknown as Transaction
 }
 
 export async function updateTransaction(id: string, transaction: Partial<Transaction>) {
-  const { data } = await api.patch<Transaction>(`/transactions/${id}`, transaction)
-  return data
+  const data = await api.patch<Transaction>(`/transactions/${id}`, transaction)
+  return data as unknown as Transaction
 }
 
 export async function deleteTransaction(id: string) {
-  const { data } = await api.delete(`/transactions/${id}`)
+  const data = await api.delete(`/transactions/${id}`)
   return data
 }

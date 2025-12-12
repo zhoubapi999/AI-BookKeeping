@@ -95,7 +95,8 @@ async function handleSaveTransaction(data: Partial<Transaction>) {
 }
 
 async function handleDeleteTransaction(id: string) {
-  if (!confirm('确定要删除吗？'))
+  // eslint-disable-next-line no-alert
+  if (!window.confirm('确定要删除吗？'))
     return
   try {
     await deleteTransaction(id)
@@ -123,7 +124,8 @@ async function handleSaveCategory(data: Partial<Category>, id?: string) {
 }
 
 async function handleDeleteCategory(id: string) {
-  if (!confirm('确定要删除吗？'))
+  // eslint-disable-next-line no-alert
+  if (!window.confirm('确定要删除吗？'))
     return
   try {
     await deleteCategory(id)
@@ -147,16 +149,20 @@ function goBack() {
 </script>
 
 <template>
-  <div class="mx-auto pb-20 bg-gray-50 max-w-md min-h-screen shadow-xl relative">
+  <div class="mx-auto pb-20 bg-gray-50 max-w-md min-h-screen shadow-xl relative animate-fade-in">
     <!-- Header -->
-    <div class="px-4 py-3 bg-white flex gap-3 shadow-sm items-center top-0 sticky z-10">
+    <div class="text-white px-4 py-4 rounded-b-[1.5rem] bg-zinc-900 flex gap-3 shadow-xl items-center top-0 relative sticky z-10 overflow-hidden">
+      <!-- Decorative Background Elements -->
+      <div class="rounded-full bg-white/5 h-64 w-64 pointer-events-none right-0 top-0 absolute blur-3xl -mr-16 -mt-16" />
+      <div class="rounded-full bg-white/5 h-48 w-48 pointer-events-none bottom-0 left-0 absolute blur-3xl -mb-10 -ml-10" />
+
       <button
-        class="p-2 rounded-full transition-colors -ml-2 hover:bg-gray-100"
+        class="p-2 rounded-full transition-all relative z-10 -ml-2 hover:bg-white/10 active:scale-95"
         @click="goBack"
       >
-        <ChevronLeft class="text-gray-700 h-6 w-6" />
+        <ChevronLeft class="text-white h-6 w-6" />
       </button>
-      <h1 class="text-lg text-gray-800 font-bold">
+      <h1 class="text-lg tracking-tight font-bold relative z-10">
         全部记录
       </h1>
     </div>

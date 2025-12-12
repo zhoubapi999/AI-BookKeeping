@@ -29,7 +29,7 @@ import TransactionsList from '~/components/TransactionsList.vue'
 const router = useRouter()
 const transactions = ref<Transaction[]>([])
 const categories = ref<Category[]>([])
-const settings = ref<Settings>({ monthlyBudget: 0 })
+const settings = ref<Settings>({ userId: '', monthlyBudget: 0 })
 const loading = ref(false)
 
 const showAddTransaction = ref(false)
@@ -62,23 +62,23 @@ async function fetchData() {
 onMounted(fetchData)
 
 // Computed Stats for Header
-const todayIncome = computed(() =>
-  transactions.value
+const todayIncome = computed(() => {
+  return transactions.value
     .filter(t => t.type === 'income' && dayjs(t.date).isSame(dayjs(), 'day'))
-    .reduce((acc, t) => acc + t.amount, 0),
-)
+    .reduce((sum, t) => sum + t.amount, 0)
+})
 
-const todayExpense = computed(() =>
-  transactions.value
+const todayExpense = computed(() => {
+  return transactions.value
     .filter(t => t.type === 'expense' && dayjs(t.date).isSame(dayjs(), 'day'))
-    .reduce((acc, t) => acc + t.amount, 0),
-)
+    .reduce((sum, t) => sum + t.amount, 0)
+})
 
-const currentMonthExpense = computed(() =>
-  transactions.value
+const currentMonthExpense = computed(() => {
+  return transactions.value
     .filter(t => t.type === 'expense' && dayjs(t.date).isSame(dayjs(), 'month'))
-    .reduce((acc, t) => acc + t.amount, 0),
-)
+    .reduce((sum, t) => sum + t.amount, 0)
+})
 
 // Handlers
 function handleOpenAddTransaction() {
@@ -117,7 +117,8 @@ async function handleSaveTransaction(data: Partial<Transaction>) {
 }
 
 async function handleDeleteTransaction(id: string) {
-  if (!confirm('确定要删除吗？'))
+  // eslint-disable-next-line no-alert
+  if (!window.confirm('确定要删除吗？'))
     return
   try {
     await deleteTransaction(id)
@@ -147,7 +148,8 @@ async function handleSaveCategory(data: Partial<Category>, id?: string) {
 }
 
 async function handleDeleteCategory(id: string) {
-  if (!confirm('确定要删除吗？'))
+  // eslint-disable-next-line no-alert
+  if (!window.confirm('确定要删除吗？'))
     return
   try {
     await deleteCategory(id)
@@ -178,7 +180,7 @@ function openAddCategory() {
 </script>
 
 <template>
-  <div class="mx-auto pb-20 bg-gray-50 max-w-md min-h-screen shadow-xl relative">
+  <div class="mx-auto pb-20 bg-gray-50 max-w-md min-h-screen shadow-xl relative animate-fade-in">
     <DashboardHeader
       :today-income="todayIncome"
       :today-expense="todayExpense"

@@ -7,6 +7,9 @@ export type CategoryDocument = Category & Document;
 @Schema()
 export class CategoryEntity {
   @Prop({ required: true })
+  userId: string;
+
+  @Prop({ required: true })
   name: string;
 
   @Prop({ required: true, enum: ["income", "expense"] })
@@ -24,8 +27,10 @@ export const CategorySchema = SchemaFactory.createForClass(CategoryEntity);
 CategorySchema.set("toJSON", {
   virtuals: true,
   versionKey: false,
-  transform: function (doc, ret: any) {
-    ret.id = ret._id.toString();
-    delete ret._id;
+  transform: function (doc: Document, ret: Record<string, any>) {
+    if (ret._id) {
+      ret.id = String(ret._id);
+      delete ret._id;
+    }
   },
 });

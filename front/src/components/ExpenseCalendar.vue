@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import type { Transaction } from '~/api'
 import dayjs from 'dayjs'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import type { Transaction } from '~/api'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
   modelValue: string // YYYY-MM-DD
@@ -38,11 +38,11 @@ const dailyExpenses = computed(() => {
 const calendarDays = computed(() => {
   const startOfMonth = currentMonth.value.startOf('month')
   const endOfMonth = currentMonth.value.endOf('month')
-  
+
   const startDayOfWeek = startOfMonth.day() // 0 (Sunday) - 6 (Saturday)
-  
+
   const days = []
-  
+
   // Previous month padding
   for (let i = 0; i < startDayOfWeek; i++) {
     const d = startOfMonth.subtract(startDayOfWeek - i, 'day')
@@ -52,7 +52,7 @@ const calendarDays = computed(() => {
       isCurrentMonth: false,
     })
   }
-  
+
   // Current month days
   for (let i = 1; i <= endOfMonth.date(); i++) {
     const d = startOfMonth.date(i)
@@ -62,7 +62,7 @@ const calendarDays = computed(() => {
       isCurrentMonth: true,
     })
   }
-  
+
   // Next month padding to fill 6 rows (42 days) or just enough to fill row
   const remaining = 42 - days.length
   for (let i = 1; i <= remaining; i++) {
@@ -73,7 +73,7 @@ const calendarDays = computed(() => {
       isCurrentMonth: false,
     })
   }
-  
+
   return days
 })
 
@@ -98,52 +98,52 @@ const weekDays = ['日', '一', '二', '三', '四', '五', '六']
 </script>
 
 <template>
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="border border-gray-100 rounded-xl bg-white shadow-sm overflow-hidden">
     <!-- Header -->
-    <div class="flex items-center justify-between p-4 border-b border-gray-50">
-      <button 
-        class="p-1 rounded-full hover:bg-gray-100 transition-colors"
+    <div class="p-4 border-b border-gray-50 flex items-center justify-between">
+      <button
+        class="p-1 rounded-full transition-colors hover:bg-gray-100"
         @click="prevMonth"
       >
-        <ChevronLeft class="w-5 h-5 text-gray-500" />
+        <ChevronLeft class="text-gray-500 h-5 w-5" />
       </button>
-      <span class="font-bold text-gray-700">
+      <span class="text-gray-700 font-bold">
         {{ currentMonth.format('YYYY年 MM月') }}
       </span>
-      <button 
-        class="p-1 rounded-full hover:bg-gray-100 transition-colors"
+      <button
+        class="p-1 rounded-full transition-colors hover:bg-gray-100"
         @click="nextMonth"
       >
-        <ChevronRight class="w-5 h-5 text-gray-500" />
+        <ChevronRight class="text-gray-500 h-5 w-5" />
       </button>
     </div>
 
     <!-- Week Days -->
-    <div class="grid grid-cols-7 text-center py-2 bg-gray-50/50">
-      <div 
-        v-for="day in weekDays" 
+    <div class="py-2 text-center bg-gray-50/50 grid grid-cols-7">
+      <div
+        v-for="day in weekDays"
         :key="day"
-        class="text-xs font-medium text-gray-400"
+        class="text-xs text-gray-400 font-medium"
       >
         {{ day }}
       </div>
     </div>
 
     <!-- Calendar Grid -->
-    <div class="grid grid-cols-7 p-2 gap-y-2">
+    <div class="p-2 gap-y-2 grid grid-cols-7">
       <button
         v-for="day in calendarDays"
         :key="day.date"
-        class="h-14 flex flex-col items-center justify-center rounded-lg relative transition-all"
+        class="rounded-lg flex flex-col h-14 transition-all items-center justify-center relative"
         :class="[
           !day.isCurrentMonth ? 'opacity-30' : '',
-          modelValue === day.date ? 'bg-primary text-primary-foreground shadow-md scale-105 z-10' : 'hover:bg-gray-50 text-gray-700'
+          modelValue === day.date ? 'bg-primary text-primary-foreground shadow-md scale-105 z-10' : 'hover:bg-gray-50 text-gray-700',
         ]"
         @click="selectDate(day.date)"
       >
         <span class="text-sm font-medium">{{ day.day }}</span>
-        <span 
-          v-if="dailyExpenses.has(day.date)" 
+        <span
+          v-if="dailyExpenses.has(day.date)"
           class="text-[10px] mt-0.5"
           :class="modelValue === day.date ? 'text-primary-foreground/90' : 'text-gray-400'"
         >

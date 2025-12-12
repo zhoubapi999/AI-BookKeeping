@@ -2,16 +2,13 @@
 import { Check, ChevronDown, ChevronUp } from 'lucide-vue-next'
 import {
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectItemIndicator,
   SelectItemText,
-  SelectLabel,
   SelectPortal,
   SelectRoot,
   SelectScrollDownButton,
   SelectScrollUpButton,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
   SelectViewport,
@@ -43,7 +40,7 @@ const emits = defineEmits<{
     </SelectTrigger>
     <SelectPortal>
       <SelectContent
-        class="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 border rounded-md max-h-96 min-w-[8rem] shadow-md relative z-50 overflow-hidden"
+        class="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=open]:animate-in data-[state=closed]:animate-out text-popover-foreground border rounded-md bg-popover max-h-96 min-w-[8rem] shadow-md relative z-50 overflow-hidden"
         position="popper"
         :side-offset="4"
       >
@@ -56,7 +53,7 @@ const emits = defineEmits<{
               v-for="option in options"
               :key="option.value"
               :value="option.value"
-              class="focus:bg-accent focus:text-accent-foreground text-sm py-1.5 pl-8 pr-2 outline-none rounded-sm flex w-full cursor-default select-none items-center relative data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
+              class="text-sm py-1.5 pl-8 pr-2 outline-none rounded-sm flex w-full cursor-default select-none items-center relative focus:text-accent-foreground focus:bg-accent data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
             >
               <span class="flex h-3.5 w-3.5 items-center left-2 justify-center absolute">
                 <SelectItemIndicator>

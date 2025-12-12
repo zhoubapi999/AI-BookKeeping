@@ -21,6 +21,6 @@ if %errorlevel% neq 0 (
 echo.
 echo Deployment successful!
 echo Frontend: http://localhost
-echo Backend: http://localhost:3000
+echo Backend: http://localhost:34863
 echo.
 pause

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import type { Category, Transaction } from '~/api'
 import dayjs from 'dayjs'
 import { Plus, Trash2 } from 'lucide-vue-next'
-import type { Category, Transaction } from '~/api'
-import { getCategoryIcon } from '~/composables/useIcons'
+import { computed, ref, watch } from 'vue'
+import Button from '~/components/ui/button/Button.vue'
 import Drawer from '~/components/ui/drawer/Drawer.vue'
 import DrawerContent from '~/components/ui/drawer/DrawerContent.vue'
 import DrawerHeader from '~/components/ui/drawer/DrawerHeader.vue'
 import DrawerTitle from '~/components/ui/drawer/DrawerTitle.vue'
-import Button from '~/components/ui/button/Button.vue'
 import Input from '~/components/ui/input/Input.vue'
 import Label from '~/components/ui/label/Label.vue'
 import Select from '~/components/ui/select/Select.vue'
+import { getCategoryIcon } from '~/composables/useIcons'
 
 const props = defineProps<{
   open: boolean
@@ -23,7 +23,7 @@ const emit = defineEmits<{
   (e: 'update:open', value: boolean): void
   (e: 'save', transaction: Partial<Transaction>): void
   (e: 'delete', id: string): void
-  (e: 'add-category'): void
+  (e: 'addCategory'): void
 }>()
 
 const isOpen = computed({
@@ -86,7 +86,7 @@ function handleDelete() {
       <DrawerHeader>
         <DrawerTitle>{{ transaction ? '编辑记录' : '记一笔' }}</DrawerTitle>
       </DrawerHeader>
-      <div class="p-4 space-y-4 max-h-[75vh] overflow-y-auto">
+      <div class="p-4 max-h-[75vh] overflow-y-auto space-y-4">
         <div class="gap-2 grid">
           <Label>金额</Label>
           <div class="relative">
@@ -130,7 +130,7 @@ function handleDelete() {
             </div>
             <div
               class="p-2 border border-gray-300 rounded-lg border-dashed flex flex-col gap-1 cursor-pointer items-center hover:bg-gray-50"
-              @click="emit('add-category')"
+              @click="emit('addCategory')"
             >
               <div class="text-gray-400 rounded-full bg-gray-100 flex h-8 w-8 items-center justify-center">
                 <Plus class="h-4 w-4" />

@@ -1,3 +1,4 @@
+import type { Component } from 'vue'
 import {
   Bus,
   Gamepad,
@@ -12,7 +13,6 @@ import {
   Wallet,
   Zap,
 } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 export const iconMap: Record<string, Component> = {
   // Legacy mappings

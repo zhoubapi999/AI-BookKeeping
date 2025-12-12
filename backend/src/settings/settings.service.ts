@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Settings } from "@app/types";
-import { SettingsEntity, SettingsDocument } from "../schemas/settings.schema";
+import { UpdateSettingsDto } from "./dto/update-settings.dto";
+import { SettingsEntity, SettingsDocument } from "./schemas/settings.schema";
 
 @Injectable()
 export class SettingsService {
@@ -11,24 +12,27 @@ export class SettingsService {
     private settingsModel: Model<SettingsDocument>,
   ) {}
 
-  async getSettings(): Promise<Settings> {
-    const settings = await this.settingsModel.findOne().exec();
+  async getSettings(userId: string): Promise<Settings> {
+    const settings = await this.settingsModel.findOne({ userId }).exec();
     if (!settings) {
       // Create default settings if not exists
-      const newSettings = new this.settingsModel({ monthlyBudget: 0 });
+      const newSettings = new this.settingsModel({ monthlyBudget: 0, userId });
       return newSettings.save();
     }
     return settings;
   }
 
-  async updateSettings(settings: Partial<Settings>): Promise<Settings> {
-    const existing = await this.settingsModel.findOne().exec();
+  async updateSettings(
+    userId: string,
+    settings: UpdateSettingsDto,
+  ): Promise<Settings> {
+    const existing = await this.settingsModel.findOne({ userId }).exec();
     if (existing) {
       return this.settingsModel
         .findByIdAndUpdate(existing._id, settings, { new: true })
         .exec() as unknown as Promise<Settings>;
     } else {
-      const newSettings = new this.settingsModel(settings);
+      const newSettings = new this.settingsModel({ ...settings, userId });
       return newSettings.save();
     }
   }

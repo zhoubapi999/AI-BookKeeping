@@ -14,8 +14,8 @@ services:
       dockerfile: deploy/backend.dockerfile
     ports:
       - "34863:34863"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/bookkeeping
+    env_file:
+      - .env
     depends_on:
       - mongo
     restart: always

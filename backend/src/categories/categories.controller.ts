@@ -6,39 +6,53 @@ import {
   Patch,
   Param,
   Delete,
-} from '@nestjs/common';
-import { CategoriesService } from './categories.service';
-import { Category } from '@app/types';
+  UseGuards,
+  Request,
+} from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { CategoriesService } from "./categories.service";
+import { CreateCategoryDto } from "./dto/create-category.dto";
+import { UpdateCategoryDto } from "./dto/update-category.dto";
+import type { RequestWithUser } from "../types";
 
-@Controller('categories')
+@Controller("categories")
+@UseGuards(AuthGuard("jwt"))
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly categoriesService: CategoriesService) { }
 
   @Post()
-  create(@Body() createCategoryDto: Omit<Category, 'id'>) {
-    return this.categoriesService.create(createCategoryDto);
+  create(
+    @Request() req: RequestWithUser,
+    @Body() createCategoryDto: CreateCategoryDto,
+  ) {
+    return this.categoriesService.create(req.user.userId, createCategoryDto);
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(@Request() req: RequestWithUser) {
+    return this.categoriesService.findAll(req.user.userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(id);
+  @Get(":id")
+  findOne(@Param("id") id: string, @Request() req: RequestWithUser) {
+    return this.categoriesService.findOne(id, req.user.userId);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   update(
-    @Param('id') id: string,
-    @Body() updateCategoryDto: Partial<Category>,
+    @Param("id") id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+    @Request() req: RequestWithUser,
   ) {
-    return this.categoriesService.update(id, updateCategoryDto);
+    return this.categoriesService.update(
+      id,
+      updateCategoryDto,
+      req.user.userId,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(id);
+  @Delete(":id")
+  remove(@Param("id") id: string, @Request() req: RequestWithUser) {
+    return this.categoriesService.remove(id, req.user.userId);
   }
 }

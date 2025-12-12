@@ -9,10 +9,13 @@ catalog:
   dayjs: ^1.11.13
   echarts: ^5.6.0
   lucide-vue-next: ^0.475.0
+  pinia: ^3.0.4
+  pinia-plugin-persistedstate: ^4.7.1
   radix-vue: ^1.9.13
   tailwind-merge: ^2.6.0
   vaul-vue: ^0.4.1
   vue-echarts: ^7.0.3
+  vue-sonner: ^2.0.9
 catalogs:
   build:
     '@iconify-json/carbon': ^1.2.9

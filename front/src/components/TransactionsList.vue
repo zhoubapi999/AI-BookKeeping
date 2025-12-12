@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import dayjs from 'dayjs'
 import type { Category, Transaction } from '~/api'
+import dayjs from 'dayjs'
+import { computed } from 'vue'
 import { getCategoryIcon } from '~/composables/useIcons'
 
 const props = defineProps<{
@@ -15,8 +15,14 @@ const emit = defineEmits<{
 
 const groupedTransactions = computed(() => {
   const groups = new Map<string, Transaction[]>()
-  // Sort transactions by date desc
-  const sorted = [...props.transactions].sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf())
+  // Sort transactions by date desc, then by id desc (newest first)
+  const sorted = [...props.transactions].sort((a, b) => {
+    const dateDiff = dayjs(b.date).valueOf() - dayjs(a.date).valueOf()
+    if (dateDiff !== 0)
+      return dateDiff
+    // If same date, sort by id descending (assuming mongo object id roughly corresponds to time)
+    return b.id.localeCompare(a.id)
+  })
 
   sorted.forEach((t) => {
     if (!groups.has(t.date)) {

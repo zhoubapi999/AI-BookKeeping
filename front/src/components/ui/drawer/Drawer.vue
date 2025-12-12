@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { cn } from '~/lib/utils'
-import { DrawerRoot, DrawerTrigger, DrawerPortal, DrawerContent, DrawerOverlay, DrawerTitle, DrawerDescription } from 'vaul-vue'
+import { DrawerRoot } from 'vaul-vue'
 
 const props = withDefaults(defineProps<{
   shouldScaleBackground?: boolean
