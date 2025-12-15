@@ -8,11 +8,13 @@ import { CategoriesModule } from "./categories/categories.module";
 import { SettingsModule } from "./settings/settings.module";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
+import { LedgersModule } from "./ledgers/ledgers.module";
+import { ItinerariesModule } from "./itineraries/itineraries.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV || "development"}`,
+      envFilePath: [`.env.${process.env.NODE_ENV || "development"}`, ".env"],
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
@@ -27,8 +29,10 @@ import { AuthModule } from "./auth/auth.module";
     SettingsModule,
     UsersModule,
     AuthModule,
+    LedgersModule,
+    ItinerariesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

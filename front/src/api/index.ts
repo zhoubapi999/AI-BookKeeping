@@ -1,4 +1,4 @@
-import type { Category, Settings, Transaction as SharedTransaction } from '@app/types'
+import type { Category, CreateLedgerDto, Ledger, Settings, Transaction as SharedTransaction } from '@app/types'
 import axios from 'axios'
 import { toast } from 'vue-sonner'
 import { router } from '~/main'
@@ -36,7 +36,7 @@ api.interceptors.response.use(
   },
 )
 
-export type { Category, Settings }
+export type { Category, Ledger, Settings }
 
 export interface Transaction extends SharedTransaction {
   category?: Category
@@ -44,6 +44,28 @@ export interface Transaction extends SharedTransaction {
 
 export * from './auth'
 
+// --- Ledgers ---
+export async function getLedgers() {
+  const data = await api.get<Ledger[]>('/ledgers')
+  return data as unknown as Ledger[]
+}
+
+export async function getLedger(id: string) {
+  const data = await api.get<Ledger>(`/ledgers/${id}`)
+  return data as unknown as Ledger
+}
+
+export async function createLedger(ledger: CreateLedgerDto) {
+  const data = await api.post<Ledger>('/ledgers', ledger)
+  return data as unknown as Ledger
+}
+
+export async function joinLedger(id: string) {
+  const data = await api.patch<Ledger>(`/ledgers/${id}/join`)
+  return data as unknown as Ledger
+}
+
+// --- Settings ---
 export async function getSettings() {
   const data = await api.get<Settings>('/settings')
   return data as unknown as Settings
@@ -74,8 +96,8 @@ export async function deleteCategory(id: string) {
   return data
 }
 
-export async function getTransactions() {
-  const data = await api.get<Transaction[]>('/transactions')
+export async function getTransactions(ledgerId?: string) {
+  const data = await api.get<Transaction[]>('/transactions', { params: { ledgerId } })
   return data as unknown as Transaction[]
 }
 
@@ -91,5 +113,32 @@ export async function updateTransaction(id: string, transaction: Partial<Transac
 
 export async function deleteTransaction(id: string) {
   const data = await api.delete(`/transactions/${id}`)
+  return data
+}
+
+// --- Itineraries ---
+export interface ItineraryItem {
+  id: string
+  ledgerId: string
+  title: string
+  description?: string
+  date: string
+  location?: string
+  imageUrl?: string
+  createdBy: string
+}
+
+export async function getItineraries(ledgerId: string) {
+  const data = await api.get<ItineraryItem[]>('/itineraries', { params: { ledgerId } })
+  return data as unknown as ItineraryItem[]
+}
+
+export async function createItinerary(itinerary: Omit<ItineraryItem, 'id' | 'createdBy'>) {
+  const data = await api.post<ItineraryItem>('/itineraries', itinerary)
+  return data as unknown as ItineraryItem
+}
+
+export async function deleteItinerary(id: string) {
+  const data = await api.delete(`/itineraries/${id}`)
   return data
 }

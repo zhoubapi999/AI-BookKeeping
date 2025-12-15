@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Query,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { TransactionsService } from "./transactions.service";
@@ -32,8 +33,8 @@ export class TransactionsController {
   }
 
   @Get()
-  findAll(@Request() req: RequestWithUser) {
-    return this.transactionsService.findAll(req.user.userId);
+  findAll(@Request() req: RequestWithUser, @Query('ledgerId') ledgerId?: string) {
+    return this.transactionsService.findAll(req.user.userId, ledgerId);
   }
 
   @Get(":id")

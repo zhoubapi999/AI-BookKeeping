@@ -5,6 +5,6 @@ import { Toaster } from 'vue-sonner'
 <template>
   <main class="bg-gray-100 h-full">
     <RouterView />
-    <Toaster position="top-center" />
+    <Toaster position="top-center" rich-colors close-button :style="{ zIndex: 99999 }" />
   </main>
 </template>

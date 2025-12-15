@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import { Transaction } from "@app/types";
 
 export type TransactionDocument = Transaction & Document;
@@ -23,6 +23,18 @@ export class TransactionEntity {
 
   @Prop({ default: "" })
   note: string;
+
+  @Prop({ type: String, ref: "Ledger", required: false })
+  ledgerId?: string;
+
+  @Prop({ type: Types.ObjectId, ref: "User" })
+  payerId?: string;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: "User" }] })
+  beneficiaryIds?: string[];
+
+  @Prop({ default: false })
+  autoMember?: boolean;
 }
 
 export const TransactionSchema =

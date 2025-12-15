@@ -48,21 +48,21 @@ function goToRegister() {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br p-4 flex min-h-screen items-center justify-center relative overflow-hidden from-blue-500 to-cyan-400">
+  <div class="bg-gradient-to-br p-4 flex min-h-screen items-center justify-center relative overflow-hidden from-gray-100 to-gray-200">
     <!-- Background decorations -->
     <div class="h-full w-full pointer-events-none left-0 top-0 absolute overflow-hidden">
-      <div class="animate-float-slow rounded-full bg-white/10 h-[40%] w-[40%] left-[-10%] top-[-10%] absolute blur-3xl" />
-      <div class="animate-float-slower rounded-full bg-blue-600/20 h-[40%] w-[40%] bottom-[-10%] right-[-10%] absolute blur-3xl" />
+      <div class="animate-float-slow rounded-full bg-black/5 h-[40%] w-[40%] left-[-10%] top-[-10%] absolute blur-3xl" />
+      <div class="animate-float-slower rounded-full bg-gray-600/5 h-[40%] w-[40%] bottom-[-10%] right-[-10%] absolute blur-3xl" />
     </div>
 
     <div class="border border-white/50 rounded-2xl bg-white/90 max-w-md w-full shadow-2xl transform transition-all overflow-hidden animate-fade-in-up backdrop-blur-xl">
       <div class="p-8">
         <div class="mb-8 text-center">
-          <div class="text-blue-600 mb-4 rounded-full bg-blue-50 inline-flex h-16 w-16 shadow-inner items-center justify-center">
+          <div class="text-black mb-4 rounded-full bg-gray-100 inline-flex h-16 w-16 shadow-inner items-center justify-center">
             <User class="h-8 w-8" />
           </div>
           <h2 class="text-2xl text-gray-800 tracking-tight font-bold">
-            欢迎回来
+            欢迎回来~
           </h2>
           <p class="text-sm text-gray-500 mt-2">
             请登录您的账号以继续
@@ -78,14 +78,14 @@ function goToRegister() {
           <div class="space-y-2">
             <Label>手机号</Label>
             <div class="group relative">
-              <div class="text-gray-400 pl-3 flex pointer-events-none transition-colors items-center inset-y-0 left-0 absolute group-focus-within:text-blue-500">
+              <div class="text-gray-400 pl-3 flex pointer-events-none transition-colors items-center inset-y-0 left-0 absolute group-focus-within:text-black">
                 <Smartphone class="h-5 w-5" />
               </div>
               <Input
                 v-model="phone"
                 type="tel"
                 required
-                class="pl-10 transition-all focus:border-blue-500 hover:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                class="pl-10 transition-all focus:border-black hover:border-gray-600 focus:ring-2 focus:ring-gray-100"
                 placeholder="请输入手机号"
               />
             </div>
@@ -94,14 +94,14 @@ function goToRegister() {
           <div class="space-y-2">
             <Label>密码</Label>
             <div class="group relative">
-              <div class="text-gray-400 pl-3 flex pointer-events-none transition-colors items-center inset-y-0 left-0 absolute group-focus-within:text-blue-500">
+              <div class="text-gray-400 pl-3 flex pointer-events-none transition-colors items-center inset-y-0 left-0 absolute group-focus-within:text-black">
                 <Lock class="h-5 w-5" />
               </div>
               <Input
                 v-model="password"
                 type="password"
                 required
-                class="pl-10 transition-all focus:border-blue-500 hover:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                class="pl-10 transition-all focus:border-black hover:border-gray-600 focus:ring-2 focus:ring-gray-100"
                 placeholder="请输入密码"
               />
             </div>
@@ -110,7 +110,7 @@ function goToRegister() {
           <Button
             type="submit"
             :disabled="loading"
-            class="text-base font-medium py-6 w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+            class="text-base font-medium py-6 w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 bg-black text-white hover:bg-gray-800"
           >
             <Loader2 v-if="loading" class="mr-2 h-5 w-5 animate-spin" />
             {{ loading ? '登录中...' : '登录' }}
@@ -120,7 +120,7 @@ function goToRegister() {
         <div class="mt-8 text-center">
           <p class="text-sm text-gray-600">
             还没有账号？
-            <button class="text-blue-600 font-medium transition-all hover:text-blue-500 hover:underline" @click="goToRegister">
+            <button class="text-black font-medium transition-all hover:text-gray-700 hover:underline" @click="goToRegister">
               立即注册
             </button>
           </p>

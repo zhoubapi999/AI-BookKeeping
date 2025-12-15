@@ -29,4 +29,13 @@ export class UsersController {
   ) {
     return this.usersService.changePassword(req.user.userId, changePasswordDto);
   }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("update")
+  async updateProfile(
+    @Request() req: RequestWithUser,
+    @Body() updateDto: { username?: string; avatar?: string },
+  ) {
+    return this.usersService.updateProfile(req.user.userId, updateDto);
+  }
 }

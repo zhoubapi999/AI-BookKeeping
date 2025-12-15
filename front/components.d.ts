@@ -8,6 +8,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppBottomNav: typeof import('./src/components/AppBottomNav.vue')['default']
+    BottomNav: typeof import('./src/components/BottomNav.vue')['default']
     BudgetDrawer: typeof import('./src/components/BudgetDrawer.vue')['default']
     Button: typeof import('./src/components/ui/button/Button.vue')['default']
     Card: typeof import('./src/components/ui/card/Card.vue')['default']
@@ -25,6 +27,7 @@ declare module 'vue' {
     ExpenseCalendar: typeof import('./src/components/ExpenseCalendar.vue')['default']
     Input: typeof import('./src/components/ui/input/Input.vue')['default']
     Label: typeof import('./src/components/ui/label/Label.vue')['default']
+    LedgerBottomNav: typeof import('./src/components/LedgerBottomNav.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('./src/components/ui/select/Select.vue')['default']

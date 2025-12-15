@@ -38,16 +38,16 @@ function handleSave() {
 
 <template>
   <Drawer v-model:open="isOpen">
-    <DrawerContent>
+    <DrawerContent class="bg-zinc-900 border-zinc-800 text-white">
       <DrawerHeader>
-        <DrawerTitle>设置月预算</DrawerTitle>
+        <DrawerTitle class="text-white">设置月预算</DrawerTitle>
       </DrawerHeader>
       <div class="p-4 space-y-4">
         <div class="space-y-2">
-          <Label>月预算金额</Label>
-          <Input v-model="amount" type="number" placeholder="输入预算金额" />
+          <Label class="text-zinc-400">月预算金额</Label>
+          <Input v-model="amount" type="number" placeholder="输入预算金额" class="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-600" />
         </div>
-        <Button class="text-lg mt-4 h-12 w-full" @click="handleSave">
+        <Button class="text-lg mt-4 h-12 w-full bg-white text-black hover:bg-gray-200" @click="handleSave">
           保存
         </Button>
       </div>

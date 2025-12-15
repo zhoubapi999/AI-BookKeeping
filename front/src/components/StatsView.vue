@@ -196,7 +196,7 @@ const chartOption = computed(() => {
       axisTick: { show: false },
       axisLine: { show: false },
       axisLabel: {
-        color: '#6b7280',
+        color: '#666',
         fontSize: 10,
         interval: 'auto',
         hideOverlap: true,
@@ -207,11 +207,11 @@ const chartOption = computed(() => {
       splitLine: {
         lineStyle: {
           type: 'dashed',
-          color: '#f3f4f6',
+          color: '#eee',
         },
       },
       axisLabel: {
-        color: '#6b7280',
+        color: '#999',
         fontSize: 10,
       },
     },
@@ -222,12 +222,12 @@ const chartOption = computed(() => {
         barWidth: '60%',
         data: finalSeriesData,
         itemStyle: {
-          color: '#3b82f6',
+          color: '#000000',
           borderRadius: [4, 4, 0, 0],
         },
         showBackground: true,
         backgroundStyle: {
-          color: 'rgba(180, 180, 180, 0.1)',
+          color: 'rgba(0, 0, 0, 0.05)',
           borderRadius: [4, 4, 0, 0],
         },
       },
@@ -256,16 +256,14 @@ const pieChartOption = computed(() => {
     .sort((a, b) => b.value - a.value) // Sort by value
 
   const colors = [
-    '#3b82f6',
-    '#10b981',
-    '#f59e0b',
-    '#ef4444',
-    '#8b5cf6',
-    '#ec4899',
-    '#6366f1',
-    '#14b8a6',
-    '#f97316',
-    '#06b6d4',
+    '#000000',
+    '#333333',
+    '#555555',
+    '#777777',
+    '#999999',
+    '#bbbbbb',
+    '#dddddd',
+    '#eeeeee',
   ]
 
   return {
@@ -273,9 +271,9 @@ const pieChartOption = computed(() => {
       trigger: 'item',
       formatter: '{b}: ¥{c} ({d}%)',
       backgroundColor: 'rgba(255, 255, 255, 0.9)',
-      borderColor: '#e5e7eb',
+      borderColor: '#ccc',
       textStyle: {
-        color: '#374151',
+        color: '#333',
       },
     },
     legend: {
@@ -285,7 +283,7 @@ const pieChartOption = computed(() => {
       itemWidth: 8,
       itemHeight: 8,
       textStyle: {
-        color: '#6b7280',
+        color: '#666',
         fontSize: 12,
       },
     },
@@ -310,7 +308,7 @@ const pieChartOption = computed(() => {
             show: true,
             fontSize: 16,
             fontWeight: 'bold',
-            color: '#374151',
+            color: '#000',
           },
           itemStyle: {
             shadowBlur: 10,
@@ -337,12 +335,12 @@ function getCategoryName(id: string) {
   <div class="pb-20 space-y-6">
     <!-- Stats Tabs -->
     <div class="flex justify-center">
-      <div class="p-1 rounded-xl bg-secondary/50 flex gap-1">
+      <div class="p-1 rounded-xl bg-gray-100 flex gap-1">
         <button
           v-for="tab in ['day', 'month', 'year'] as const"
           :key="tab"
           class="text-sm font-medium px-6 py-1.5 rounded-lg transition-all"
-          :class="statsTab === tab ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'"
+          :class="statsTab === tab ? 'bg-white shadow-sm text-black' : 'text-gray-500 hover:text-gray-700'"
           @click="statsTab = tab"
         >
           {{ tab === 'day' ? '日' : tab === 'month' ? '月' : '年' }}
@@ -356,34 +354,34 @@ function getCategoryName(id: string) {
         <Input
           v-model="startDate"
           type="date"
-          class="text-sm text-center border-border/50 bg-background h-10 w-full transition-colors focus:border-primary"
+          class="text-sm text-center border-gray-200 bg-white text-black w-full transition-colors focus:border-gray-300"
         />
       </div>
-      <span class="text-sm text-muted-foreground font-medium">至</span>
+      <span class="text-sm text-gray-500 font-medium">至</span>
       <div class="flex-1 relative">
         <Input
           v-model="endDate"
           type="date"
-          class="text-sm text-center border-border/50 bg-background h-10 w-full transition-colors focus:border-primary"
+          class="text-sm text-center border-gray-200 bg-white text-black w-full transition-colors focus:border-gray-300"
         />
       </div>
     </div>
 
-    <Card class="border-border/50 shadow-sm">
+    <Card class="bg-white shadow-sm rounded-2xl border-none">
       <CardHeader class="pb-2">
         <div class="flex items-center justify-between">
-          <CardTitle class="text-base font-semibold flex gap-2 items-center">
-            <div class="i-carbon-chart-bar text-primary h-4 w-4" />
+          <CardTitle class="text-base font-semibold flex gap-2 items-center text-gray-900">
+            <div class="i-carbon-chart-bar text-black h-4 w-4" />
             支出/收入趋势
           </CardTitle>
         </div>
         <div
           v-if="hoveredData"
-          class="text-xs text-primary font-bold mt-2 flex gap-1 cursor-pointer items-center justify-center animate-fade-in hover:underline"
+          class="text-xs text-black font-bold mt-2 flex gap-1 cursor-pointer items-center justify-center animate-fade-in hover:underline"
           @click="handleHeaderClick"
         >
           {{ hoveredData.label }}: ¥{{ hoveredData.value }}
-          <div v-if="hoveredData.date" class="text-[10px] text-gray-400 font-normal ml-1 flex items-center">
+          <div v-if="hoveredData.date" class="text-[10px] text-gray-500 font-normal ml-1 flex items-center">
             点击查看 <ArrowRight class="ml-0.5 h-3 w-3" />
           </div>
         </div>
@@ -399,24 +397,24 @@ function getCategoryName(id: string) {
       </CardContent>
     </Card>
 
-    <Card class="border-border/50 shadow-sm">
+    <Card class="bg-white shadow-sm rounded-2xl border-none">
       <CardHeader class="pb-2">
         <div class="flex items-center justify-between">
-          <CardTitle class="text-base font-semibold flex gap-2 items-center">
-            <div class="i-carbon-pie-chart text-primary h-4 w-4" />
+          <CardTitle class="text-base font-semibold flex gap-2 items-center text-gray-900">
+            <div class="i-carbon-pie-chart text-black h-4 w-4" />
             分类构成
           </CardTitle>
-          <div class="p-1 rounded-lg bg-secondary/50 flex gap-1">
+          <div class="p-1 rounded-lg bg-gray-100 flex gap-1">
             <button
               class="text-xs font-medium px-3 py-1 rounded-md transition-all"
-              :class="pieChartType === 'expense' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'"
+              :class="pieChartType === 'expense' ? 'bg-white shadow-sm text-black' : 'text-gray-500 hover:text-gray-700'"
               @click="pieChartType = 'expense'"
             >
               支出
             </button>
             <button
               class="text-xs font-medium px-3 py-1 rounded-md transition-all"
-              :class="pieChartType === 'income' ? 'bg-background shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'"
+              :class="pieChartType === 'income' ? 'bg-white shadow-sm text-black' : 'text-gray-500 hover:text-gray-700'"
               @click="pieChartType = 'income'"
             >
               收入

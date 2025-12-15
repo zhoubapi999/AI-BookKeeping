@@ -28,4 +28,18 @@ export class CreateTransactionDto implements ICreateTransactionDto {
   @IsString()
   @IsOptional()
   note: string;
+
+  @IsString()
+  @IsOptional()
+  ledgerId?: string;
+
+  @IsString()
+  @IsOptional()
+  payerId?: string;
+
+  @IsOptional()
+  beneficiaryIds?: string[];
+
+  @IsOptional()
+  autoMember?: boolean;
 }

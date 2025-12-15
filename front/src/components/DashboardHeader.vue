@@ -48,8 +48,8 @@ const budgetPercent = computed(() => {
 
     <div class="mb-6 gap-4 grid grid-cols-2 relative z-10">
       <div class="p-3 border border-white/5 rounded-2xl bg-zinc-800/50 flex gap-3 shadow-sm transition-all duration-300 items-center backdrop-blur-md hover:bg-zinc-800/80">
-        <div class="p-2 rounded-xl bg-emerald-500/10">
-          <TrendingUp class="text-emerald-400 h-5 w-5" />
+        <div class="p-2 rounded-xl bg-white/10">
+          <TrendingUp class="text-white h-5 w-5" />
         </div>
         <div>
           <p class="text-xs text-zinc-400 font-medium mb-0.5">
@@ -61,8 +61,8 @@ const budgetPercent = computed(() => {
         </div>
       </div>
       <div class="p-3 border border-white/5 rounded-2xl bg-zinc-800/50 flex gap-3 shadow-sm transition-all duration-300 items-center backdrop-blur-md hover:bg-zinc-800/80">
-        <div class="p-2 rounded-xl bg-rose-500/10">
-          <TrendingDown class="text-rose-400 h-5 w-5" />
+        <div class="p-2 rounded-xl bg-white/10">
+          <TrendingDown class="text-white h-5 w-5" />
         </div>
         <div>
           <p class="text-xs text-zinc-400 font-medium mb-0.5">

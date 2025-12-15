@@ -1,15 +1,17 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { UsersService } from "../users/users.service";
+import { CategoriesService } from "../categories/categories.service";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
+    private categoriesService: CategoriesService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(
     phone: string,
@@ -39,10 +41,22 @@ export class AuthService {
       throw new UnauthorizedException("Phone number already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Generate default username (last 4 digits of phone)
+    const username = phone.slice(-4);
+
+    // Generate random avatar using UI Avatars with random background
+    const avatar = `https://ui-avatars.com/api/?name=${username}&background=random&length=4`;
+
     const user = await this.usersService.create({
       phone,
       password: hashedPassword,
+      username,
+      avatar,
     });
+    // Create default categories for the new user
+    await this.categoriesService.createDefaults(String(user._id));
+
     return this.login(user as unknown as { phone: string; _id: string });
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { User, UserDocument } from "./schemas/user.schema";
@@ -41,5 +41,27 @@ export class UsersService {
     user.password = hashedPassword;
     await user.save();
     return { success: true };
+  }
+
+  async updateProfile(userId: string, updateDto: { username?: string; avatar?: string }) {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new BadRequestException("User not found");
+    }
+
+    if (updateDto.username) {
+      user.username = updateDto.username;
+    }
+    if (updateDto.avatar) {
+      user.avatar = updateDto.avatar;
+    }
+
+    await user.save();
+    return { 
+      id: String(user._id),
+      phone: user.phone,
+      username: user.username,
+      avatar: user.avatar 
+    };
   }
 }

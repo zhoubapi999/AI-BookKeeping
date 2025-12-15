@@ -6,7 +6,11 @@ export interface Transaction {
   categoryId: string
   date: string // ISO date string
   note: string
+  ledgerId?: string
+  payerId?: string
+  beneficiaryIds?: string[]
+  autoMember?: boolean
 }
 
-export interface CreateTransactionDto extends Omit<Transaction, 'id' | 'userId'> {}
-export interface UpdateTransactionDto extends Partial<CreateTransactionDto> {}
+export interface CreateTransactionDto extends Omit<Transaction, 'id' | 'userId'> { }
+export interface UpdateTransactionDto extends Partial<CreateTransactionDto> { }

@@ -67,7 +67,7 @@ function getCategoryIconName(id: string) {
       class="space-y-2"
     >
       <!-- Date Header -->
-      <div class="text-sm text-gray-500 px-2 flex justify-between">
+      <div class="text-sm text-gray-400 px-2 flex justify-between">
         <span>{{ group.date }}</span>
         <div class="flex gap-3">
           <span v-if="group.dayIncome > 0">收 ¥{{ group.dayIncome.toFixed(2) }}</span>
@@ -76,7 +76,7 @@ function getCategoryIconName(id: string) {
       </div>
 
       <!-- Transactions -->
-      <div class="rounded-xl bg-white shadow-sm overflow-hidden">
+      <div class="rounded-2xl bg-white shadow-sm overflow-hidden">
         <div
           v-for="(t, index) in group.transactions"
           :key="t.id"
@@ -95,18 +95,16 @@ function getCategoryIconName(id: string) {
               <p class="text-base text-gray-900 font-bold">
                 {{ getCategoryName(t.categoryId) }}
               </p>
-              <p v-if="t.note" class="text-sm text-gray-500 mt-0.5">
+              <p v-if="t.note" class="text-sm text-gray-400 mt-0.5">
                 {{ t.note }}
               </p>
             </div>
           </div>
-          <div class="flex gap-3 items-center">
-            <p
-              class="text-lg font-bold"
-              :class="t.type === 'income' ? 'text-green-600' : 'text-red-600'"
-            >
-              {{ t.type === 'income' ? '+' : '-' }}{{ t.amount }}
-            </p>
+          <div
+            class="font-bold text-base"
+            :class="t.type === 'expense' ? 'text-gray-900' : 'text-green-500'"
+          >
+            {{ t.type === 'expense' ? '-' : '+' }}¥{{ t.amount.toFixed(2) }}
           </div>
         </div>
       </div>

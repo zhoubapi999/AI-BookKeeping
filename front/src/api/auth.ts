@@ -20,6 +20,11 @@ export async function changePassword(data: ChangePasswordDto) {
   return result
 }
 
+export async function updateProfile(data: { username?: string, avatar?: string }) {
+  const result = await api.post('/users/update', data)
+  return result
+}
+
 export async function getProfile() {
   const result = await api.get('/users/me')
   return result

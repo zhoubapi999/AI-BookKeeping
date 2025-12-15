@@ -3,7 +3,10 @@ packages:
   - backend
   - packages/types
 catalog:
+  '@types/bcryptjs': ^3.0.0
+  archiver: ^7.0.1
   axios: ^1.7.9
+  bcryptjs: ^3.0.3
   clsx: ^2.1.1
   concurrently: ^8.2.2
   dayjs: ^1.11.13

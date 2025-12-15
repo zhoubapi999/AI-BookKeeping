@@ -4,9 +4,15 @@
   "scripts": {
     "dev": "concurrently \"pnpm --filter front dev\" \"pnpm --filter backend start:dev\"",
     "build": "pnpm -r build",
+    "zip": "node scripts/zip.js",
     "test": "pnpm -r test"
   },
+  "dependencies": {
+    "@types/bcryptjs": "catalog:",
+    "bcryptjs": "catalog:"
+  },
   "devDependencies": {
+    "archiver": "catalog:",
     "concurrently": "catalog:"
   },
   "resolutions": {

@@ -9,6 +9,7 @@ export type UserDocument = User & Document;
     getters: true,
     transform: (doc: Document, ret: Record<string, any>) => {
       if (ret._id) {
+        ret.id = String(ret._id);
         delete ret._id;
       }
       if (ret.__v !== undefined) {
@@ -27,6 +28,12 @@ export class User {
 
   @Prop({ required: true })
   password?: string;
+
+  @Prop()
+  username?: string;
+
+  @Prop()
+  avatar?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

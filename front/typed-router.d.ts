@@ -22,8 +22,14 @@ declare module 'vue-router/auto-routes' {
     '/[...all]': RouteRecordInfo<'/[...all]', '/:all(.*)', { all: ParamValue<true> }, { all: ParamValue<false> }>,
     '/hi/[name]': RouteRecordInfo<'/hi/[name]', '/hi/:name', { name: ParamValue<true> }, { name: ParamValue<false> }>,
     '/history': RouteRecordInfo<'/history', '/history', Record<never, never>, Record<never, never>>,
+    '/invite/[id]': RouteRecordInfo<'/invite/[id]', '/invite/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/ledger/[id]/': RouteRecordInfo<'/ledger/[id]/', '/ledger/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/ledger/[id]/itinerary/': RouteRecordInfo<'/ledger/[id]/itinerary/', '/ledger/:id/itinerary', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/ledger/[id]/split/': RouteRecordInfo<'/ledger/[id]/split/', '/ledger/:id/split', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/ledger/create/': RouteRecordInfo<'/ledger/create/', '/ledger/create', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/my': RouteRecordInfo<'/my', '/my', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
+    '/travel/': RouteRecordInfo<'/travel/', '/travel', Record<never, never>, Record<never, never>>,
   }
 }

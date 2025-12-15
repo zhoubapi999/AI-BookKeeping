@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ChevronRight, Home, Lock, LogOut } from 'lucide-vue-next'
+import { ChevronRight, Home, Lock, LogOut, User as UserIcon } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { changePassword, getProfile } from '~/api/auth'
+import { changePassword, getProfile, updateProfile } from '~/api/auth'
 import Button from '~/components/ui/button/Button.vue'
 import Drawer from '~/components/ui/drawer/Drawer.vue'
 import DrawerContent from '~/components/ui/drawer/DrawerContent.vue'
@@ -25,11 +25,17 @@ const error = ref('')
 const loading = ref(false)
 const showPasswordDrawer = ref(false)
 
+// Profile Edit State
+const showProfileDrawer = ref(false)
+const editUsername = ref('')
+const editAvatar = ref('')
+
 onMounted(async () => {
   try {
     // Refresh user profile in background
     const profile = await getProfile()
     userStore.setUser(profile)
+    initEditForm()
   }
   catch {
     if (!user.value) {
@@ -37,6 +43,37 @@ onMounted(async () => {
     }
   }
 })
+
+function initEditForm() {
+  if (user.value) {
+    editUsername.value = user.value.username || user.value.phone?.slice(-4) || ''
+    editAvatar.value = user.value.avatar || ''
+  }
+}
+
+async function handleUpdateProfile() {
+  loading.value = true
+  error.value = ''
+  message.value = ''
+
+  try {
+    const updatedUser = await updateProfile({
+      username: editUsername.value,
+      avatar: editAvatar.value
+    })
+    userStore.setUser(updatedUser)
+    message.value = '资料修改成功'
+
+    setTimeout(() => {
+      showProfileDrawer.value = false
+      message.value = ''
+    }, 1500)
+  } catch (e: any) {
+    error.value = e.response?.data?.message || '修改失败'
+  } finally {
+    loading.value = false
+  }
+}
 
 async function handleChangePassword() {
   if (newPassword.value !== confirmNewPassword.value) {
@@ -102,18 +139,19 @@ function goBack() {
         </Button>
       </div>
 
-      <div class="flex gap-4 items-center relative z-10">
+      <div class="flex gap-4 items-center relative z-10" @click="showProfileDrawer = true">
         <img
-          :src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${user?.phone || 'user'}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc`"
-          class="h-16 w-16 rounded-full ring-2 ring-zinc-700 object-cover"
+          :src="user?.avatar || `https://ui-avatars.com/api/?name=${user?.username || 'user'}&background=random`"
+          class="h-16 w-16 rounded-full ring-2 ring-zinc-700 object-cover cursor-pointer"
           alt="User Avatar"
         />
-        <div>
-          <h2 class="text-xl text-white font-bold">
-            用户 {{ user?.phone?.slice(-4) }}
+        <div class="cursor-pointer">
+          <h2 class="text-xl text-white font-bold flex items-center gap-2">
+            {{ user?.username || `用户 ${user?.phone?.slice(-4)}` }}
+            <ChevronRight class="w-4 h-4 opacity-50" />
           </h2>
           <p class="text-sm text-zinc-400 mt-1">
-            已登录
+            {{ user?.phone }}
           </p>
         </div>
       </div>
@@ -123,10 +161,23 @@ function goBack() {
     <div class="mx-auto mt-8 px-4 max-w-md space-y-4">
       <div
         class="p-4 rounded-2xl bg-white flex cursor-pointer shadow-sm transition-all items-center justify-between hover:shadow-md active:scale-[0.98]"
+        @click="showProfileDrawer = true"
+      >
+        <div class="flex items-center space-x-4">
+          <div class="text-black p-3 rounded-xl bg-gray-100">
+            <UserIcon class="h-6 w-6" />
+          </div>
+          <span class="text-gray-700 font-medium">修改资料</span>
+        </div>
+        <ChevronRight class="text-gray-400 h-5 w-5" />
+      </div>
+
+      <div
+        class="p-4 rounded-2xl bg-white flex cursor-pointer shadow-sm transition-all items-center justify-between hover:shadow-md active:scale-[0.98]"
         @click="showPasswordDrawer = true"
       >
         <div class="flex items-center space-x-4">
-          <div class="text-blue-600 p-3 rounded-xl bg-blue-50">
+          <div class="text-black p-3 rounded-xl bg-gray-100">
             <Lock class="h-6 w-6" />
           </div>
           <span class="text-gray-700 font-medium">修改密码</span>
@@ -139,7 +190,7 @@ function goBack() {
         @click="handleLogout"
       >
         <div class="flex items-center space-x-4">
-          <div class="text-red-600 p-3 rounded-xl bg-red-50">
+          <div class="text-black p-3 rounded-xl bg-gray-100">
             <LogOut class="h-6 w-6" />
           </div>
           <span class="text-gray-700 font-medium">退出登录</span>
@@ -147,6 +198,64 @@ function goBack() {
         <ChevronRight class="text-gray-400 h-5 w-5" />
       </div>
     </div>
+
+    <!-- Profile Edit Drawer -->
+    <Drawer v-model:open="showProfileDrawer">
+      <DrawerContent>
+        <div class="mx-auto max-w-sm w-full">
+          <DrawerHeader>
+            <DrawerTitle>修改资料</DrawerTitle>
+          </DrawerHeader>
+
+          <div class="p-4 pb-8">
+             <div v-if="message" class="text-sm text-black mb-4 p-3 rounded-lg bg-gray-100 flex items-center animate-pulse">
+              {{ message }}
+            </div>
+            <div v-if="error" class="animate-shake text-sm text-red-600 mb-4 p-3 rounded-lg bg-red-50 flex items-center">
+              {{ error }}
+            </div>
+
+            <form class="space-y-4" @submit.prevent="handleUpdateProfile">
+              <div class="space-y-2">
+                <Label>昵称</Label>
+                <Input
+                  v-model="editUsername"
+                  placeholder="请输入昵称"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <Label>头像链接</Label>
+                <div class="flex gap-2">
+                  <Input
+                    v-model="editAvatar"
+                    placeholder="请输入头像 URL"
+                  />
+                  <div class="w-10 h-10 rounded-full overflow-hidden border bg-gray-100 shrink-0">
+                    <img
+                      :src="editAvatar || `https://ui-avatars.com/api/?name=${editUsername}&background=random`"
+                      class="w-full h-full object-cover"
+                      @error="(e: any) => e.target.src = `https://ui-avatars.com/api/?name=${editUsername}&background=random`"
+                    />
+                  </div>
+                </div>
+                <p class="text-xs text-gray-500">
+                  支持网络图片链接
+                </p>
+              </div>
+
+              <Button
+                type="submit"
+                class="mt-6 w-full"
+                :disabled="loading"
+              >
+                {{ loading ? '保存中...' : '保存修改' }}
+              </Button>
+            </form>
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
 
     <!-- Password Drawer -->
     <Drawer v-model:open="showPasswordDrawer">
@@ -157,7 +266,7 @@ function goBack() {
           </DrawerHeader>
 
           <div class="p-4 pb-8">
-            <div v-if="message" class="text-sm text-green-600 mb-4 p-3 rounded-lg bg-green-50 flex items-center animate-pulse">
+            <div v-if="message" class="text-sm text-black mb-4 p-3 rounded-lg bg-gray-100 flex items-center animate-pulse">
               {{ message }}
             </div>
 

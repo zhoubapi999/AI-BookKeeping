@@ -6,11 +6,13 @@ import {
   TransactionEntity,
   TransactionSchema,
 } from "./schemas/transaction.schema";
+import { Ledger, LedgerSchema } from "../ledgers/schemas/ledger.schema";
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: TransactionEntity.name, schema: TransactionSchema },
+      { name: Ledger.name, schema: LedgerSchema },
     ]),
   ],
   controllers: [TransactionsController],

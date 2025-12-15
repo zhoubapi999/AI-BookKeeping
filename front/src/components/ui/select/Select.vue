@@ -31,7 +31,7 @@ const emits = defineEmits<{
   <SelectRoot :model-value="modelValue" @update:model-value="emits('update:modelValue', $event)">
     <SelectTrigger
       :class="cn(
-        'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+        'flex h-12 w-full items-center justify-between rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
         $props.class,
       )"
     >
@@ -40,7 +40,7 @@ const emits = defineEmits<{
     </SelectTrigger>
     <SelectPortal>
       <SelectContent
-        class="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=open]:animate-in data-[state=closed]:animate-out text-popover-foreground border rounded-md bg-popover max-h-96 min-w-[8rem] shadow-md relative z-50 overflow-hidden"
+        class="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=open]:animate-in data-[state=closed]:animate-out text-popover-foreground border rounded-xl bg-popover max-h-96 min-w-[8rem] shadow-xl relative z-50 overflow-hidden"
         position="popper"
         :side-offset="4"
       >
@@ -53,7 +53,7 @@ const emits = defineEmits<{
               v-for="option in options"
               :key="option.value"
               :value="option.value"
-              class="text-sm py-1.5 pl-8 pr-2 outline-none rounded-sm flex w-full cursor-default select-none items-center relative focus:text-accent-foreground focus:bg-accent data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
+              class="text-sm py-1.5 pl-8 pr-2 outline-none rounded-lg flex w-full cursor-default select-none items-center relative focus:text-accent-foreground focus:bg-accent data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
             >
               <span class="flex h-3.5 w-3.5 items-center left-2 justify-center absolute">
                 <SelectItemIndicator>

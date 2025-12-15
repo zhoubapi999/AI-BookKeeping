@@ -12,7 +12,7 @@ const props = defineProps<{
     <DrawerOverlay class="bg-black/80 inset-0 fixed z-50" />
     <DrawerContent
       :class="cn(
-        'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background',
+        'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-3xl border bg-background',
         props.class,
       )"
     >
