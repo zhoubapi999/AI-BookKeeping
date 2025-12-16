@@ -110,7 +110,7 @@ async function fetchData() {
     const [lData, tData, cData, sData] = await Promise.all([
       getLedger(ledgerId.value),
       getTransactions(ledgerId.value),
-      getCategories(),
+      getCategories(ledgerId.value),
       getSettings(),
     ])
     ledger.value = lData
@@ -270,7 +270,7 @@ async function handleSaveCategory(data: Partial<Category>, id?: string) {
       await updateCategory(id, data)
     }
     else {
-      await createCategory(data as Omit<Category, 'id'>)
+      await createCategory({ ...data, ledgerId: ledgerId.value } as Omit<Category, 'id'>)
     }
     // Don't close drawer as user might want to continue managing categories
     // showCategoryDrawer.value = false

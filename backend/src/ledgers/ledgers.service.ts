@@ -8,12 +8,15 @@ import {
   TransactionDocument,
 } from "../transactions/schemas/transaction.schema";
 
+import { CategoriesService } from "../categories/categories.service";
+
 @Injectable()
 export class LedgersService {
   constructor(
     @InjectModel(Ledger.name) private ledgerModel: Model<LedgerDocument>,
     @InjectModel(TransactionEntity.name)
     private transactionModel: Model<TransactionDocument>,
+    private categoriesService: CategoriesService,
   ) { }
 
   async create(
@@ -27,7 +30,13 @@ export class LedgersService {
       users,
       createdBy: userId,
     });
-    return newLedger.save();
+    const savedLedger = await newLedger.save();
+    // Initialize default categories for the ledger
+    await this.categoriesService.createDefaults(
+      userId,
+      String(savedLedger._id),
+    );
+    return savedLedger;
   }
 
   async findAll(userId: string): Promise<Ledger[]> {

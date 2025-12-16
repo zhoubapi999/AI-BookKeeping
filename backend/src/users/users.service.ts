@@ -4,15 +4,21 @@ import { Model } from "mongoose";
 import * as bcrypt from "bcryptjs";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { ChangePasswordDto } from "./dto/change-password.dto";
+import { CategoriesService } from "../categories/categories.service";
 import { User, UserDocument } from "./schemas/user.schema";
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private categoriesService: CategoriesService,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     const createdUser = new this.userModel(createUserDto);
-    return createdUser.save();
+    const savedUser = await createdUser.save();
+    await this.categoriesService.createDefaults(String(savedUser._id));
+    return savedUser;
   }
 
   async findOneByPhone(phone: string): Promise<UserDocument | null> {

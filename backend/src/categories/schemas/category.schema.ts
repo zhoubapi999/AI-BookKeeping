@@ -6,8 +6,11 @@ export type CategoryDocument = Category & Document;
 
 @Schema()
 export class CategoryEntity {
-  @Prop({ required: true })
+  @Prop({ required: false })
   userId: string;
+
+  @Prop({ required: false })
+  ledgerId: string;
 
   @Prop({ required: true })
   name: string;

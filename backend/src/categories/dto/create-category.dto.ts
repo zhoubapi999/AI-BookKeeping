@@ -1,5 +1,5 @@
 import { CreateCategoryDto as ICreateCategoryDto } from "@app/types";
-import { IsString, IsEnum, IsNotEmpty } from "class-validator";
+import { IsString, IsEnum, IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateCategoryDto implements ICreateCategoryDto {
   @IsString()
@@ -17,4 +17,8 @@ export class CreateCategoryDto implements ICreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   icon: string;
+
+  @IsString()
+  @IsOptional()
+  ledgerId?: string;
 }

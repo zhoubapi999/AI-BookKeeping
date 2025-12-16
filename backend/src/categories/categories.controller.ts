@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Query,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { CategoriesService } from "./categories.service";
@@ -29,8 +30,8 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll(@Request() req: RequestWithUser) {
-    return this.categoriesService.findAll(req.user.userId);
+  findAll(@Request() req: RequestWithUser, @Query("ledgerId") ledgerId?: string) {
+    return this.categoriesService.findAll(req.user.userId, ledgerId);
   }
 
   @Get(":id")

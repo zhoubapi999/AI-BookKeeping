@@ -76,8 +76,8 @@ export async function updateSettings(settings: Partial<Settings>) {
   return data as unknown as Settings
 }
 
-export async function getCategories() {
-  const data = await api.get<Category[]>('/categories')
+export async function getCategories(ledgerId?: string) {
+  const data = await api.get<Category[]>('/categories', { params: { ledgerId } })
   return data as unknown as Category[]
 }
 
