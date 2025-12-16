@@ -7,6 +7,7 @@ import { ArrowLeft } from 'lucide-vue-next'
 const router = useRouter()
 const title = ref('')
 const loading = ref(false)
+const error = ref('')
 
 const coverOptions = [
   'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80', // Switzerland
@@ -23,14 +24,16 @@ async function handleCreate() {
   if (!title.value) return
 
   loading.value = true
+  error.value = ''
   try {
     const ledger = await createLedger({
       title: title.value,
       coverImage: selectedCover.value,
     })
     router.push(`/ledger/${ledger.id}`)
-  } catch (error) {
-    console.error(error)
+  } catch (e: any) {
+    console.error(e)
+    error.value = e.response?.data?.message || '创建失败'
   } finally {
     loading.value = false
   }
@@ -56,6 +59,7 @@ async function handleCreate() {
           placeholder="例如：2024 日本之旅"
           class="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black bg-white"
         />
+        <p v-if="error" class="text-red-500 text-sm mt-1">{{ error }}</p>
       </div>
 
       <!-- Cover Selection -->

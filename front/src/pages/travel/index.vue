@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { Map, Plus, Trash2 } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 import { useRouter } from 'vue-router'
-import { getLedgers, type Ledger } from '~/api'
-import { Plus, Map } from 'lucide-vue-next'
+import { deleteLedger, getLedgers, type Ledger } from '~/api'
 import AppBottomNav from '~/components/AppBottomNav.vue'
 
 const router = useRouter()
@@ -27,6 +28,22 @@ function handleCreateLedger() {
 function handleOpenLedger(id: string) {
   if (!id) return
   router.push(`/ledger/${id}`)
+}
+
+async function handleDeleteLedger(id: string, event: Event) {
+  event.stopPropagation()
+  if (!confirm('确定要删除这个旅程吗？删除后无法恢复。'))
+    return
+
+  try {
+    await deleteLedger(id)
+    toast.success('删除成功')
+    await fetchLedgers()
+  }
+  catch (error) {
+    console.error('Failed to delete ledger', error)
+    toast.error('删除失败')
+  }
 }
 
 onMounted(fetchLedgers)
@@ -56,6 +73,12 @@ onMounted(fetchLedgers)
           @click="handleOpenLedger(ledger.id)"
         >
           <div class="aspect-[4/3] bg-gray-200 relative overflow-hidden">
+            <button
+              class="absolute top-2 right-2 z-10 p-2 bg-black/30 hover:bg-red-500 text-white rounded-full transition-colors backdrop-blur-sm"
+              @click="(e) => handleDeleteLedger(ledger.id, e)"
+            >
+              <Trash2 class="w-4 h-4" />
+            </button>
             <img
               v-if="ledger.coverImage"
               :src="ledger.coverImage"

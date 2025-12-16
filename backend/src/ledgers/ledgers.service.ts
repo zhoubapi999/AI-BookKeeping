@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Ledger, LedgerDocument } from "./schemas/ledger.schema";
@@ -23,6 +27,15 @@ export class LedgersService {
     createLedgerDto: CreateLedgerDto,
     userId: string,
   ): Promise<Ledger> {
+    // Check if ledger with same title exists for the user
+    const existingLedger = await this.ledgerModel.findOne({
+      createdBy: userId,
+      title: createLedgerDto.title,
+    });
+    if (existingLedger) {
+      throw new ConflictException("您已拥有同名的旅行账本");
+    }
+
     const { userIds = [], ...rest } = createLedgerDto;
     const users = [...new Set([userId, ...userIds])]; // Ensure creator is in users
     const newLedger = new this.ledgerModel({
@@ -53,7 +66,7 @@ export class LedgersService {
       .populate("createdBy", "username email avatar")
       .exec();
     if (!ledger) {
-      throw new NotFoundException(`Ledger #${id} not found`);
+      throw new NotFoundException(`未找到 ID 为 #${id} 的账本`);
     }
     // Ensure toJSON is called with virtuals if needed by the framework,
     // but typically NestJS interceptor handles it.
@@ -66,7 +79,7 @@ export class LedgersService {
       .findByIdAndUpdate(id, updateLedgerDto, { new: true })
       .exec();
     if (!existingLedger) {
-      throw new NotFoundException(`Ledger #${id} not found`);
+      throw new NotFoundException(`未找到 ID 为 #${id} 的账本`);
     }
     return existingLedger;
   }
@@ -76,7 +89,7 @@ export class LedgersService {
       .findByIdAndUpdate(id, { $addToSet: { users: userId } }, { new: true })
       .populate("users", "username email avatar");
 
-    if (!ledger) throw new NotFoundException("Ledger not found");
+    if (!ledger) throw new NotFoundException("未找到账本");
 
     // Auto-add new member to transactions with autoMember: true
     await this.transactionModel.updateMany(
@@ -90,7 +103,7 @@ export class LedgersService {
   async remove(id: string): Promise<Ledger> {
     const deletedLedger = await this.ledgerModel.findByIdAndDelete(id);
     if (!deletedLedger) {
-      throw new NotFoundException(`Ledger #${id} not found`);
+      throw new NotFoundException(`未找到 ID 为 #${id} 的账本`);
     }
     return deletedLedger;
   }

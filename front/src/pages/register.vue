@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Loader2, Lock, Smartphone, UserPlus } from 'lucide-vue-next'
+import { Loader2, Lock, Smartphone, UserPlus, User } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { register } from '~/api/auth'
@@ -10,20 +10,15 @@ import { useUserStore } from '~/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
+const username = ref('')
 const phone = ref('')
 const password = ref('')
-const confirmPassword = ref('')
 const error = ref('')
 const loading = ref(false)
 
 async function handleRegister() {
   if (!phone.value || !password.value) {
     error.value = '请输入手机号和密码'
-    return
-  }
-
-  if (password.value !== confirmPassword.value) {
-    error.value = '两次输入的密码不一致'
     return
   }
 
@@ -36,7 +31,11 @@ async function handleRegister() {
   error.value = ''
 
   try {
-    const { token } = await register({ phone: phone.value, password: password.value })
+    const { token } = await register({
+      phone: phone.value,
+      password: password.value,
+      username: username.value
+    })
     userStore.setToken(token)
     router.push('/')
   }
@@ -82,6 +81,22 @@ function goToLogin() {
 
         <form class="space-y-6" @submit.prevent="handleRegister">
           <div class="space-y-2">
+            <Label>昵称</Label>
+            <div class="group relative">
+              <div class="text-gray-400 pl-3 flex pointer-events-none transition-colors items-center inset-y-0 left-0 absolute group-focus-within:text-black">
+                <User class="h-5 w-5" />
+              </div>
+              <Input
+                v-model="username"
+                type="text"
+                required
+                class="pl-10 transition-all focus:border-black hover:border-gray-600 focus:ring-2 focus:ring-gray-100"
+                placeholder="请输入昵称"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-2">
             <Label>手机号</Label>
             <div class="group relative">
               <div class="text-gray-400 pl-3 flex pointer-events-none transition-colors items-center inset-y-0 left-0 absolute group-focus-within:text-black">
@@ -109,22 +124,6 @@ function goToLogin() {
                 required
                 class="pl-10 transition-all focus:border-black hover:border-gray-600 focus:ring-2 focus:ring-gray-100"
                 placeholder="请输入密码（至少6位）"
-              />
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <Label>确认密码</Label>
-            <div class="group relative">
-              <div class="text-gray-400 pl-3 flex pointer-events-none transition-colors items-center inset-y-0 left-0 absolute group-focus-within:text-black">
-                <Lock class="h-5 w-5" />
-              </div>
-              <Input
-                v-model="confirmPassword"
-                type="password"
-                required
-                class="pl-10 transition-all focus:border-black hover:border-gray-600 focus:ring-2 focus:ring-gray-100"
-                placeholder="请再次输入密码"
               />
             </div>
           </div>

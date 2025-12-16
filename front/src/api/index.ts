@@ -65,6 +65,11 @@ export async function joinLedger(id: string) {
   return data as unknown as Ledger
 }
 
+export async function deleteLedger(id: string) {
+  const data = await api.delete(`/ledgers/${id}`)
+  return data
+}
+
 // --- Settings ---
 export async function getSettings() {
   const data = await api.get<Settings>('/settings')

@@ -12,7 +12,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private categoriesService: CategoriesService,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     const createdUser = new this.userModel(createUserDto);
@@ -25,6 +25,10 @@ export class UsersService {
     return this.userModel.findOne({ phone }).exec();
   }
 
+  async findOneByUsername(username: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ username }).exec();
+  }
+
   async findOneById(id: string): Promise<UserDocument | null> {
     return this.userModel.findById(id).exec();
   }
@@ -32,7 +36,7 @@ export class UsersService {
   async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
     const user = await this.userModel.findById(userId);
     if (!user || !user.password) {
-      throw new BadRequestException("User not found");
+      throw new BadRequestException("未找到用户");
     }
 
     const isMatch = await bcrypt.compare(
@@ -40,7 +44,7 @@ export class UsersService {
       user.password,
     );
     if (!isMatch) {
-      throw new BadRequestException("Old password is incorrect");
+      throw new BadRequestException("旧密码错误");
     }
 
     const hashedPassword = await bcrypt.hash(changePasswordDto.newPassword, 10);
@@ -49,10 +53,13 @@ export class UsersService {
     return { success: true };
   }
 
-  async updateProfile(userId: string, updateDto: { username?: string; avatar?: string }) {
+  async updateProfile(
+    userId: string,
+    updateDto: { username?: string; avatar?: string },
+  ) {
     const user = await this.userModel.findById(userId);
     if (!user) {
-      throw new BadRequestException("User not found");
+      throw new BadRequestException("未找到用户");
     }
 
     if (updateDto.username) {
@@ -63,11 +70,11 @@ export class UsersService {
     }
 
     await user.save();
-    return { 
+    return {
       id: String(user._id),
       phone: user.phone,
       username: user.username,
-      avatar: user.avatar 
+      avatar: user.avatar,
     };
   }
 }

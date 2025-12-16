@@ -31,12 +31,18 @@ catalogs:
       specifier: ^0.12.0
       version: 0.12.0
   default:
+    '@types/bcryptjs':
+      specifier: ^3.0.0
+      version: 3.0.0
     archiver:
       specifier: ^7.0.1
       version: 7.0.1
     axios:
       specifier: ^1.7.9
       version: 1.13.2
+    bcryptjs:
+      specifier: ^3.0.3
+      version: 3.0.3
     clsx:
       specifier: ^2.1.1
       version: 2.1.1
@@ -133,10 +139,10 @@ importers:
   .:
     dependencies:
       '@types/bcryptjs':
-        specifier: ^3.0.0
+        specifier: 'catalog:'
         version: 3.0.0
       bcryptjs:
-        specifier: ^3.0.3
+        specifier: 'catalog:'
         version: 3.0.3
     devDependencies:
       archiver:

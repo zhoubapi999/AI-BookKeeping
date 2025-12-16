@@ -184,7 +184,7 @@ const myBalance = computed(() => {
       <div class="rounded-full bg-white/5 h-48 w-48 pointer-events-none bottom-0 left-0 absolute blur-3xl -mb-10 -ml-10" />
 
       <!-- Header Buttons -->
-      <div class="absolute top-0 left-0 right-0 p-6 pt-8 flex justify-between items-start z-20">
+      <!-- <div class="absolute top-0 left-0 right-0 p-6 pt-8 flex justify-between items-start z-20">
         <button
           class="p-2 bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-all active:scale-95"
           @click="router.push(`/ledger/${ledgerId}`)"
@@ -199,7 +199,7 @@ const myBalance = computed(() => {
             <Share class="w-5 h-5" />
           </button>
         </div>
-      </div>
+      </div> -->
 
       <div class="flex items-center justify-center relative z-10 pt-4">
         <h1 class="text-xl font-bold">多人分账</h1>

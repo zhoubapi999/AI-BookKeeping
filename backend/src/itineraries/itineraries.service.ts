@@ -28,7 +28,7 @@ export class ItinerariesService {
   async remove(id: string): Promise<ItineraryItem> {
     const deleted = await this.itineraryModel.findByIdAndDelete(id);
     if (!deleted) {
-      throw new NotFoundException(`Itinerary item #${id} not found`);
+      throw new NotFoundException(`未找到行程项目`);
     }
     return deleted;
   }

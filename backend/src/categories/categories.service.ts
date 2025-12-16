@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ConflictException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { CreateCategoryDto } from "./dto/create-category.dto";
@@ -13,6 +13,18 @@ export class CategoriesService {
   ) { }
 
   async create(userId: string, createCategoryDto: CreateCategoryDto) {
+    const { name, ledgerId } = createCategoryDto;
+
+    // Check if category with same name exists for this user/ledger
+    const query = ledgerId
+      ? { ledgerId, name }
+      : { userId, name, $or: [{ ledgerId: { $exists: false } }, { ledgerId: null }] };
+
+    const existingCategory = await this.categoryModel.findOne(query);
+    if (existingCategory) {
+      throw new ConflictException("该分类名称已存在");
+    }
+
     const createdCategory = new this.categoryModel({
       ...createCategoryDto,
       userId,

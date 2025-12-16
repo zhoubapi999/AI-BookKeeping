@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { ChevronLeft } from 'lucide-vue-next'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { toast } from 'vue-sonner'
 import {
   type Category,
   createCategory,
@@ -118,8 +119,9 @@ async function handleSaveCategory(data: Partial<Category>, id?: string) {
     }
     await fetchData()
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to save category', error)
+    toast.error(error.response?.data?.message || '保存失败')
   }
 }
 

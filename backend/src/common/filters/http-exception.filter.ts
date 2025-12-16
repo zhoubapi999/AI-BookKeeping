@@ -20,9 +20,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const exceptionResponse =
       exception instanceof HttpException
         ? exception.getResponse()
-        : "Internal server error";
+        : "服务器内部错误";
 
-    let message = "Internal server error";
+    let message = "服务器内部错误";
 
     if (typeof exceptionResponse === "string") {
       message = exceptionResponse;

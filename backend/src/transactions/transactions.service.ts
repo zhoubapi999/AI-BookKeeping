@@ -49,7 +49,7 @@ export class TransactionsService {
 
   async findOne(id: string, userId: string) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new NotFoundException("Transaction not found");
+      throw new NotFoundException("未找到账单");
     }
     const transaction = await this.transactionModel.findById(id);
     if (!transaction) return null;
@@ -77,12 +77,12 @@ export class TransactionsService {
     userId: string,
   ) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new NotFoundException("Transaction not found");
+      throw new NotFoundException("未找到账单");
     }
 
     const transaction = await this.transactionModel.findById(id);
     if (!transaction) {
-      throw new NotFoundException("Transaction not found");
+      throw new NotFoundException("未找到账单");
     }
 
     // Check permissions
@@ -105,9 +105,7 @@ export class TransactionsService {
     }
 
     if (!hasPermission) {
-      throw new ForbiddenException(
-        "You do not have permission to update this transaction",
-      );
+      throw new ForbiddenException("您没有权限修改此账单");
     }
 
     return this.transactionModel
@@ -119,12 +117,12 @@ export class TransactionsService {
 
   async remove(id: string, userId: string) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new NotFoundException("Transaction not found");
+      throw new NotFoundException("未找到账单");
     }
 
     const transaction = await this.transactionModel.findById(id);
     if (!transaction) {
-      throw new NotFoundException("Transaction not found");
+      throw new NotFoundException("未找到账单");
     }
 
     // Check permissions
@@ -146,9 +144,7 @@ export class TransactionsService {
     }
 
     if (!hasPermission) {
-      throw new ForbiddenException(
-        "You do not have permission to delete this transaction",
-      );
+      throw new ForbiddenException("您没有权限删除此账单");
     }
 
     await this.transactionModel.findByIdAndDelete(id).exec();

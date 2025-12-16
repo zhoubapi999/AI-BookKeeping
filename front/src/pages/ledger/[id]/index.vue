@@ -276,8 +276,9 @@ async function handleSaveCategory(data: Partial<Category>, id?: string) {
     // showCategoryDrawer.value = false
     await fetchData()
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to save category', error)
+    toast.error(error.response?.data?.message || '保存失败')
   }
 }
 
@@ -329,7 +330,7 @@ function openAddCategory() {
       <div class="absolute top-0 left-0 right-0 p-6 pt-8 flex justify-between items-start z-20">
         <button
           class="p-2 bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-all active:scale-95"
-          @click="router.push('/')"
+          @click="router.push('/travel')"
         >
           <ArrowLeft class="w-6 h-6" />
         </button>

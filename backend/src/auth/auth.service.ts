@@ -1,4 +1,10 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcryptjs";
 import { UsersService } from "../users/users.service";
@@ -35,18 +41,29 @@ export class AuthService {
   }
 
   async register(authDto: CreateUserDto) {
-    const { phone, password } = authDto;
+    const { phone, password, username: dtoUsername } = authDto;
     const existingUser = await this.usersService.findOneByPhone(phone);
     if (existingUser) {
-      throw new UnauthorizedException("Phone number already exists");
+      throw new HttpException(
+        "该手机号已注册",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate default username (last 4 digits of phone)
-    const username = phone.slice(-4);
+    // Use provided username or default to last 4 digits of phone
+    const username = dtoUsername || phone.slice(-4);
+
+    // Check if username already exists
+    const existingUsername =
+      await this.usersService.findOneByUsername(username);
+    if (existingUsername) {
+      throw new ConflictException("该昵称已存在");
+    }
 
     // Generate random avatar using UI Avatars with random background
     const avatar = `https://ui-avatars.com/api/?name=${username}&background=random&length=4`;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await this.usersService.create({
       phone,

@@ -9,7 +9,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppBottomNav: typeof import('./src/components/AppBottomNav.vue')['default']
-    BottomNav: typeof import('./src/components/BottomNav.vue')['default']
     BudgetDrawer: typeof import('./src/components/BudgetDrawer.vue')['default']
     Button: typeof import('./src/components/ui/button/Button.vue')['default']
     Card: typeof import('./src/components/ui/card/Card.vue')['default']

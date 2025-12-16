@@ -17,6 +17,7 @@ import {
 } from '~/api'
 import { Plus } from 'lucide-vue-next'
 import dayjs from 'dayjs'
+import { toast } from 'vue-sonner'
 import TransactionsList from '~/components/TransactionsList.vue'
 import StatsView from '~/components/StatsView.vue'
 import TransactionDrawer from '~/components/TransactionDrawer.vue'
@@ -81,8 +82,9 @@ async function handleSaveCategory(data: Partial<Category>, id?: string) {
     }
     await fetchData()
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to save category', error)
+    toast.error(error.response?.data?.message || '保存失败')
   }
 }
 
